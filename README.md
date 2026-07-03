@@ -1,226 +1,182 @@
-\# FloodAI: On-Board Satellite Flood Intelligence
+# FloodAI
 
+## Multi-Modal Flood Intelligence System
 
+FloodAI is an end-to-end artificial intelligence system designed to improve flood monitoring and disaster response by combining multiple sources of information into a single decision-making pipeline.
 
-\## Overview
+Unlike traditional flood prediction projects that rely on a single dataset or model, FloodAI integrates satellite imagery, weather observations, and environmental factors to produce a comprehensive flood risk assessment.
 
+The long-term vision is to simulate an intelligent edge AI system capable of processing satellite imagery, analysing environmental conditions, and generating actionable flood intelligence while minimizing the amount of data transmitted.
 
+---
 
-FloodAI is an AI-powered satellite flood monitoring system designed to perform \*\*on-board inference\*\* directly on a satellite instead of transmitting massive amounts of raw imagery back to Earth.
+# Project Objectives
 
+- Detect flooded regions from satellite imagery.
+- Predict flood risk using environmental data.
+- Analyse weather conditions related to flooding.
+- Fuse multiple AI models into a single flood intelligence system.
+- Generate actionable flood risk reports.
+- Simulate intelligent disaster monitoring workflows.
 
+---
 
-Traditional Earth observation satellites capture terabytes of imagery during natural disasters. Transmitting this data to ground stations introduces communication delays and requires significant bandwidth before disaster response teams can begin analyzing the situation.
-
-
-
-FloodAI aims to solve this problem by moving the intelligence into space.
-
-
-
-Instead of transmitting every captured image, the satellite analyzes images on-board using a machine learning model. Only relevant flood imagery, along with a compact technical report, is transmitted to Earth, significantly reducing bandwidth requirements and enabling faster disaster response.
-
-
-
-\---
-
-
-
-\## Project Goals
-
-
-
-\* Detect flooded regions from satellite imagery.
-
-\* Segment flooded areas to estimate the extent of damage.
-
-\* Monitor flood progression over time.
-
-\* Predict flood spread using sequential satellite observations.
-
-\* Simulate on-board AI inference for satellite computing.
-
-\* Generate lightweight reports containing critical disaster information.
-
-\* Reduce communication bandwidth by transmitting only relevant data.
-
-
-
-\---
-
-
-
-\## Expected Pipeline
-
-
+# System Architecture
 
 ```text
+                    FloodAI
 
-Satellite captures imagery
+         ┌────────────────────────┐
+         │ Satellite Module       │
+         │ (Computer Vision)      │
+         └────────────────────────┘
+                    │
+                    ▼
+           Flood Segmentation
 
-&#x20;           │
+                    +
 
-&#x20;           ▼
+         ┌────────────────────────┐
+         │ Weather Module         │
+         │ (Time Series / ML)     │
+         └────────────────────────┘
+                    │
+                    ▼
+             Weather Risk
 
-&#x20;  On-board AI Inference
+                    +
 
-&#x20;           │
+         ┌────────────────────────┐
+         │ Environmental Module   │
+         │ (Regression)           │
+         └────────────────────────┘
+                    │
+                    ▼
+            Flood Probability
 
-&#x20;    ┌──────┴──────┐
+                    ▼
 
-&#x20;    │             │
+          Multi-Modal Fusion Engine
 
-&#x20;No Flood      Flood Detected
+                    ▼
 
-&#x20;    │             │
-
-&#x20;Discard      Analyze Flood
-
-&#x20;                  │
-
-&#x20;                  ▼
-
-&#x20;       Estimate affected area
-
-&#x20;       Predict spread direction
-
-&#x20;       Generate technical report
-
-&#x20;       Compress relevant image
-
-&#x20;                  │
-
-&#x20;                  ▼
-
-&#x20;     Transmit only essential data
-
+         Comprehensive Flood Report
 ```
 
+---
 
+# Current Project Status
 
-\---
+## Completed
 
+- Project initialization
+- Repository structure
+- Development environment setup
+- Dataset collection
+- Exploratory Data Analysis (EDA)
+- Environmental regression baseline
+- Project architecture design
 
+---
 
-\## Planned Features
+## In Progress
 
+- Satellite image preprocessing
+- Satellite dataset analysis
+- Weather data preprocessing
 
+---
 
-\### Phase 1 — Data Preparation
+## Planned
 
+### Phase 1
+Environmental Intelligence Module
 
+### Phase 2
+Satellite Flood Segmentation Module
 
-\* Load satellite imagery
+### Phase 3
+Weather Intelligence Module
 
-\* Load segmentation masks
+### Phase 4
+Multi-Modal Fusion Engine
 
-\* Visualize datasets
+### Phase 5
+Interactive Web Application
 
-\* Data preprocessing
+### Phase 6
+Edge AI Simulation for Satellite Deployment
 
+---
 
+# Datasets
 
-\### Phase 2 — Flood Detection
+## Dataset A (Development)
 
+Synthetic environmental flood dataset.
 
+Current purpose:
+- Regression pipeline development
+- Testing
+- Debugging
 
-\* Binary flood classification
+A real-world environmental dataset will replace this module later.
 
-\* Model evaluation
+---
 
-\* Performance benchmarking
+## Dataset B
 
+Satellite imagery and segmentation masks used for flood detection and segmentation.
 
+---
 
-\### Phase 3 — Flood Segmentation
+## Dataset C
 
+Historical weather and rainfall datasets used to estimate weather-related flood risk.
 
+---
 
-\* Pixel-wise flood mapping
+# Technologies
 
-\* Flood area estimation
+- Python
+- Pandas
+- NumPy
+- Scikit-Learn
+- PyTorch
+- OpenCV
+- Matplotlib
+- Jupyter Notebook
 
+---
 
-
-\### Phase 4 — Flood Change Detection
-
-
-
-\* Compare satellite images across time
-
-\* Detect expansion or recession of flood regions
-
-
-
-\### Phase 5 — Flood Spread Prediction
-
-
-
-\* Predict future flood progression using temporal imagery
-
-
-
-\### Phase 6 — On-Board AI Simulation
-
-
-
-\* Simulate resource-constrained satellite hardware
-
-\* Optimize model size and inference speed
-
-
-
-\### Phase 7 — Intelligent Data Transmission
-
-
-
-Generate compact outputs such as:
-
-
-
-\* Flood confidence
-
-\* Flooded area
-
-\* Spread direction
-
-\* Geographic coordinates
-
-\* Timestamp
-
-\* Estimated risk level
-
-
-
-along with only the relevant satellite image.
-
-
-
-\---
-
-
-
-\## Project Structure
-
-
+# Repository Structure
 
 ```text
-
 FloodAI/
 
 │
 
-├── dataset/
+├── app/
 
-│   ├── images/
+├── data/
 
-│   └── masks/
+│   ├── environmental/
+│   ├── environmental_synthetic_data/
+│   ├── satellite/
+│   └── weather/
 
 │
 
 ├── models/
 
-├── notebooks/
+│   ├── environmental/
+│   ├── vision/
+│   ├── weather/
+│   └── fusion/
+
+│
+
+├── notebook/
 
 ├── outputs/
 
@@ -228,67 +184,26 @@ FloodAI/
 
 │
 
-├── dataset.py
+├── README.md
 
-├── train.py
+├── requirements.txt
 
-├── predict.py
-
-└── README.md
-
+└── .gitignore
 ```
 
+---
 
+# Future Work
 
-\---
+- Replace the synthetic environmental dataset with real-world observations.
+- Improve satellite flood segmentation accuracy.
+- Train weather prediction models.
+- Develop a fusion engine that combines outputs from multiple AI models.
+- Build a web application for interactive flood analysis.
+- Investigate edge AI deployment for satellite-based inference.
 
+---
 
+# Disclaimer
 
-\## Tech Stack
-
-
-
-\* Python
-
-\* PyTorch
-
-\* OpenCV
-
-\* Pillow
-
-\* Matplotlib
-
-
-
-\---
-
-
-
-\## Current Status
-
-
-
-🚧 Project initialization
-
-
-
-The repository currently contains the initial project structure. Model development, dataset integration, and training will be implemented in future commits.
-
-
-
-\---
-
-
-
-\## Long-Term Vision
-
-
-
-The goal of this project is to demonstrate how AI can be deployed directly on satellites to enable faster, bandwidth-efficient disaster monitoring. Rather than transmitting every captured image, the satellite performs intelligent filtering and analysis in orbit, sending only actionable information to Earth.
-
-
-
-While this repository is a research-oriented simulation and not intended for deployment on actual satellite hardware, it is designed to closely mirror the workflow of a real on-board Earth observation AI system.
-
-
-
+FloodAI is an educational and research-oriented project exploring multi-modal artificial intelligence for disaster management. It is not intended for operational flood forecasting or emergency response without further validation.
