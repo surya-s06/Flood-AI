@@ -5,7 +5,7 @@ dataset = FloodDataset(
     "dataset/masks"
 )
 
-print(len(dataset))
+print(f"Number of images: {len(dataset)}")
 
 image, mask = dataset[0]
 
