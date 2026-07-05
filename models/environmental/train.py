@@ -25,7 +25,7 @@ r2 = r2_score(y_test, predictions)
 
 print()
 
-print("========== RESULTS ==========")
+print("RESULTS - ")
 
 print(f"MSE : {mse}")
 
