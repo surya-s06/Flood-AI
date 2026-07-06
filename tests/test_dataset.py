@@ -12,9 +12,10 @@ dataset = FloodDataset(
     "data/satellite/masks"
 )
 
-print("Dataset length:", len(dataset))
-
 image, mask = dataset[0]
 
 print(type(image))
 print(type(mask))
+
+print(image.shape)
+print(mask.shape)

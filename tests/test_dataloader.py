@@ -7,7 +7,6 @@ sys.path.insert(0, PROJECT_ROOT)
 from torch.utils.data import DataLoader
 from models.vision.dataset import FloodDataset
 
-
 dataset = FloodDataset(
     "data/satellite/images",
     "data/satellite/masks"
@@ -23,3 +22,6 @@ images, masks = next(iter(dataloader))
 
 print(type(images))
 print(type(masks))
+
+print(images.shape)
+print(masks.shape)
