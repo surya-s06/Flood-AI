@@ -1,57 +1,38 @@
+print("UNET FILE IS RUNNING")
+
 import torch
 import torch.nn as nn
 
 
-# ------------------------------------
-# Double Convolution Block
-# ------------------------------------
-
 class DoubleConv(nn.Module):
+    """
+    Two consecutive convolution layers:
+    Conv -> ReLU -> Conv -> ReLU
+    """
 
     def __init__(self, in_channels, out_channels):
-
         super().__init__()
 
-        self.conv = nn.Sequential(
-
-            nn.Conv2d(
-                in_channels,
-                out_channels,
-                kernel_size=3,
-                padding=1
-            ),
-
+        self.double_conv = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
 
-            nn.Conv2d(
-                out_channels,
-                out_channels,
-                kernel_size=3,
-                padding=1
-            ),
-
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
             nn.ReLU(inplace=True)
-
         )
 
     def forward(self, x):
+        return self.double_conv(x)
 
-        return self.conv(x)
-
-
-# ------------------------------------
-# U-Net
-# ------------------------------------
 
 class UNet(nn.Module):
 
-    def __init__(self):
-
+    def __init__(self, in_channels=3, out_channels=1):
         super().__init__()
 
-        # Encoder
+        # ---------------- Encoder ----------------
 
-        self.enc1 = DoubleConv(3, 64)
+        self.enc1 = DoubleConv(in_channels, 64)
         self.pool1 = nn.MaxPool2d(2)
 
         self.enc2 = DoubleConv(64, 128)
@@ -63,11 +44,11 @@ class UNet(nn.Module):
         self.enc4 = DoubleConv(256, 512)
         self.pool4 = nn.MaxPool2d(2)
 
-        # Bottleneck
+        # ---------------- Bottleneck ----------------
 
         self.bottleneck = DoubleConv(512, 1024)
 
-        # Decoder
+        # ---------------- Decoder ----------------
 
         self.up4 = nn.ConvTranspose2d(
             1024,
@@ -105,62 +86,62 @@ class UNet(nn.Module):
 
         self.dec1 = DoubleConv(128, 64)
 
-        # Final layer
+        # ---------------- Output ----------------
 
         self.final = nn.Conv2d(
             64,
-            1,
+            out_channels,
             kernel_size=1
         )
 
     def forward(self, x):
 
-        # Encoder
+        # ---------- Encoder ----------
 
         e1 = self.enc1(x)
-
         p1 = self.pool1(e1)
 
         e2 = self.enc2(p1)
-
         p2 = self.pool2(e2)
 
         e3 = self.enc3(p2)
-
         p3 = self.pool3(e3)
 
         e4 = self.enc4(p3)
-
         p4 = self.pool4(e4)
 
-        # Bottleneck
+        # ---------- Bottleneck ----------
 
         b = self.bottleneck(p4)
 
-        # Decoder
+        # ---------- Decoder ----------
 
         d4 = self.up4(b)
-
         d4 = torch.cat([d4, e4], dim=1)
-
         d4 = self.dec4(d4)
 
         d3 = self.up3(d4)
-
         d3 = torch.cat([d3, e3], dim=1)
-
         d3 = self.dec3(d3)
 
         d2 = self.up2(d3)
-
         d2 = torch.cat([d2, e2], dim=1)
-
         d2 = self.dec2(d2)
 
         d1 = self.up1(d2)
-
         d1 = torch.cat([d1, e1], dim=1)
-
         d1 = self.dec1(d1)
 
         return self.final(d1)
+
+
+if __name__ == "__main__":
+
+    model = UNet()
+
+    x = torch.randn(1, 3, 256, 256)
+
+    y = model(x)
+
+    print("Input :", x.shape)
+    print("Output:", y.shape)
