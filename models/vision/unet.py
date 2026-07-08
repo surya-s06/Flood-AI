@@ -1,5 +1,3 @@
-print("UNET FILE IS RUNNING")
-
 import torch
 import torch.nn as nn
 

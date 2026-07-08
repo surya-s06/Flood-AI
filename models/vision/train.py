@@ -1,40 +1,38 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-import os
 
 from dataset import FloodDataset
 from unet import UNet
 
 
-# -----------------------
+# -------------------------
 # Hyperparameters
-# -----------------------
+# -------------------------
 
-BATCH_SIZE = 1
+BATCH_SIZE = 4
 LEARNING_RATE = 0.001
-EPOCHS = 5
+EPOCHS = 10
 
 
-# -----------------------
+# -------------------------
 # Device
-# -----------------------
+# -------------------------
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
 
 print(f"Using device: {device}")
 
-
-# -----------------------
+# -------------------------
 # Dataset
-# -----------------------
+# -------------------------
 
 dataset = FloodDataset(
-    "../../data/satellite/images",
-    "../../data/satellite/masks"
+    "data/satellite/Images",
+    "data/satellite/Masks"
 )
-
-print("Dataset size:", len(dataset))
 
 loader = DataLoader(
     dataset,
@@ -42,71 +40,56 @@ loader = DataLoader(
     shuffle=True
 )
 
-print("Number of batches:", len(loader))
+print("Dataset size:", len(dataset))
+print("Batches:", len(loader))
 
-# -----------------------
+# -------------------------
 # Model
-# -----------------------
+# -------------------------
 
 model = UNet().to(device)
 
-
-# -----------------------
-# Loss
-# -----------------------
-
 criterion = nn.BCEWithLogitsLoss()
-
-
-# -----------------------
-# Optimizer
-# -----------------------
 
 optimizer = torch.optim.Adam(
     model.parameters(),
     lr=LEARNING_RATE
 )
 
+print("Model created successfully.")
 
-# -----------------------
-# Training
-# -----------------------
+# -------------------------
+# Training Loop
+# -------------------------
 
-print("\nStarting Training...\n")
+print("\nStarting training...\n")
 
 for epoch in range(EPOCHS):
-    
-    print("Entering epoch loop...")
 
     running_loss = 0.0
 
     for images, masks in loader:
-        
-       
 
         images = images.to(device)
         masks = masks.to(device)
 
         optimizer.zero_grad()
 
-       
-        print(images.dtype, images.shape, images.min().item(), images.max().item())
+        print("Forward pass...")
         outputs = model(images)
+        print("Forward pass complete")
 
-       
-
-        
+        print("Calculating loss...")
         loss = criterion(outputs, masks)
+        print("Loss:", loss.item())
 
-        print("4. Loss =", loss.item())
-
-        print("5. Backpropagation...")
+        print("Backward...")
         loss.backward()
+        print("Backward complete")
 
-        print("6. Optimizer step...")
+        print("Optimizer step...")
         optimizer.step()
-
-        print("7. Finished one batch")
+        print("Optimizer complete")
 
         running_loss += loss.item()
 
@@ -116,21 +99,3 @@ for epoch in range(EPOCHS):
         f"Epoch [{epoch+1}/{EPOCHS}] "
         f"Loss: {average_loss:.4f}"
     )
-
-
-# -----------------------
-# Save model
-# -----------------------
-
-os.makedirs("saved_models", exist_ok=True)
-
-torch.save(
-    model.state_dict(),
-    "saved_models/unet_flood_model.pth"
-)
-
-print("\nTraining Complete!")
-
-print("Model saved to:")
-
-print("saved_models/unet_flood_model.pth")
