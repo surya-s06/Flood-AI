@@ -8,7 +8,7 @@ from torch.utils.data import random_split
 
 from dataset import FloodDataset
 from unet import UNet
-
+from loss import BCEDiceLoss
 
 # ======================================================
 # Configuration
@@ -17,15 +17,15 @@ from unet import UNet
 IMAGE_DIR = "data/satellite/Images"
 MASK_DIR = "data/satellite/Masks"
 
-BATCH_SIZE = 4
+BATCH_SIZE = 3
 LEARNING_RATE = 0.001
 EPOCHS = 10
 
 TRAIN_SPLIT = 0.8
 
-SAVE_DIR = "models/vision/saved_models"
+SAVE_DIR = "models/vision/saved_models/V2"
 
-HISTORY_FILE = "outputs/training/history.csv"
+HISTORY_FILE = "models/vision/saved_models/V2/history.csv"
 
 
 # ======================================================
@@ -88,14 +88,23 @@ print(f"Validation Images : {len(val_dataset)}")
 
 model = UNet().to(device)
 
-criterion = nn.BCEWithLogitsLoss()
+criterion = BCEDiceLoss()
 
 optimizer = torch.optim.Adam(
     model.parameters(),
     lr=LEARNING_RATE
 )
 
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode="min",
+    factor=0.5,
+    patience=2
+)
+
 print("\nModel initialized successfully.")
+
+print("Checkpoint A")
 
 
 # ======================================================
@@ -103,6 +112,8 @@ print("\nModel initialized successfully.")
 # ======================================================
 
 with open(HISTORY_FILE, "w", newline="") as file:
+    
+    print("Checkpoint B")
 
     writer = csv.writer(file)
 
@@ -119,6 +130,7 @@ with open(HISTORY_FILE, "w", newline="") as file:
 
 best_val_loss = float("inf")
 
+print("Checkpoint C")
 
 # ======================================================
 # Validation Function
@@ -155,38 +167,73 @@ print("\n========================================")
 print("Training Started")
 print("========================================\n")
 
+print("Checkpoint D")
+
 for epoch in range(EPOCHS):
+    
+    print(f"Starting Epoch {epoch+1}")
 
     model.train()
 
     running_train_loss = 0.0
 
     for images, masks in train_loader:
+        
+        print("Loaded first batch")
 
         images = images.to(device)
         masks = masks.to(device)
 
         optimizer.zero_grad()
 
+        print("1. Running forward pass...")
+
+        print(images.dtype, images.shape, images.min().item(), images.max().item())
+
         outputs = model(images)
+
+        print("2. Forward pass complete")
+
+        print("3. Calculating loss...")
 
         loss = criterion(outputs, masks)
 
+        print("4. Loss =", loss.item())
+
+        print("5. Backpropagation...")
+
         loss.backward()
 
+        print("6. Backpropagation complete")
+
+        torch.nn.utils.clip_grad_norm_(
+        model.parameters(),
+        max_norm=1.0
+        )
+
+        print("7. Optimizer step...")
+
         optimizer.step()
+
+        print("8. Optimizer complete")
 
         running_train_loss += loss.item()
 
     average_train_loss = running_train_loss / len(train_loader)
 
     average_val_loss = validate()
+    
+    scheduler.step(average_val_loss)
 
     print(
         f"Epoch [{epoch+1}/{EPOCHS}] | "
         f"Train Loss: {average_train_loss:.4f} | "
         f"Validation Loss: {average_val_loss:.4f}"
     )
+    
+    current_lr = optimizer.param_groups[0]["lr"]
+
+    print(f"Learning Rate : {current_lr:.6f}")
 
     # ==========================================
     # Save history

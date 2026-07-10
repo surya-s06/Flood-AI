@@ -6,6 +6,9 @@ from torch.utils.data import Dataset
 
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
+from torchvision.transforms import functional as TF
+
+import random
 
 
 class FloodDataset(Dataset):
@@ -47,9 +50,17 @@ class FloodDataset(Dataset):
             )
 
         self.image_transform = transforms.Compose([
-            transforms.Resize((256, 256)),
-            transforms.ToTensor()
-        ])
+
+    transforms.Resize((256, 256)),
+
+    transforms.ColorJitter(
+        brightness=0.2,
+        contrast=0.2
+    ),
+
+    transforms.ToTensor()
+
+])
 
         self.mask_transform = transforms.Compose([
             transforms.Resize(
@@ -81,6 +92,30 @@ class FloodDataset(Dataset):
         image = Image.open(image_path).convert("RGB")
 
         mask = Image.open(mask_path).convert("L")
+        
+        # ----------------------------------------
+        # Paired Horizontal Flip
+        # ----------------------------------------
+
+        if random.random() < 0.5:
+
+            image = TF.hflip(image)
+
+            mask = TF.hflip(mask)
+
+        # ----------------------------------------
+        # Paired Rotation
+        # ----------------------------------------
+
+        angle = random.uniform(-10, 10)
+
+        image = TF.rotate(image, angle)
+
+        mask = TF.rotate(
+            mask,
+            angle,
+            interpolation=InterpolationMode.NEAREST
+        )
 
         image = self.image_transform(image)
 

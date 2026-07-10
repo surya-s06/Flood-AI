@@ -13,7 +13,7 @@ from unet import UNet
 
 IMAGE_PATH = "data/satellite/Images/0.jpg"
 
-MODEL_PATH = "models/vision/saved_models/best_model.pth"
+MODEL_PATH = "models/vision/saved_models/V2/best_model.pth"
 
 OUTPUT_DIR = "outputs/predictions"
 

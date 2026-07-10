@@ -122,17 +122,127 @@ Current purpose:
 
 A real-world environmental dataset will replace this module later.
 
+## Current Status
+
+**Paused**
+
+### Reason
+
+The initial environmental dataset turned out to be **synthetically generated**.
+
+Although it was useful for testing the preprocessing pipeline, training a production model on synthetic values would not produce reliable results.
+
+### Work Completed
+
+- Data preprocessing pipeline
+- Feature analysis
+- Initial regression experiments
+- Baseline training pipeline
+
+### Current Decision
+
+The environmental module is paused while a higher-quality real-world dataset is being sourced.
+
+Development will resume once a suitable dataset is available.
+
 ---
 
 ## Dataset B
 
 Satellite imagery and segmentation masks used for flood detection and segmentation.
 
+## Data
+
+- 290 satellite images
+- 290 corresponding segmentation masks
+
+# Vision Module V1
+
+The first version established the complete computer vision pipeline.
+
+### Completed
+
+- Custom PyTorch Dataset
+- DataLoader
+- U-Net implementation
+- Training pipeline
+- Prediction pipeline
+- Evaluation pipeline
+
+### Results
+
+| Metric | Score |
+|---------|--------|
+| IoU | 0.5715 |
+| Dice Score | 0.7213 |
+| Pixel Accuracy | 0.8148 |
+
+### Conclusion
+
+Version 1 successfully demonstrated that the model could learn meaningful flood segmentation.
+
+However, the predictions contained:
+
+- rough boundaries
+- missed small flooded regions
+- incomplete segmentation masks
+
+---
+
+# Vision Module V2
+
+Version 2 focused on improving the training pipeline instead of changing the architecture.
+
+## Improvements
+
+- BCE + Dice Loss
+- Paired data augmentation
+- Learning rate scheduler
+- Gradient clipping
+
+## Results
+
+| Metric | V1 | V2 |
+|---------|------|------|
+| IoU | 0.5715 | **0.6227** |
+| Dice Score | 0.7213 | **0.7629** |
+| Pixel Accuracy | 0.8148 | **0.8280** |
+
+### Outcome
+
+The improvements produced measurable gains across all evaluation metrics.
+
+Visual inspection also showed cleaner segmentation masks and better detection of large flooded regions.
+
+Despite the improvement, the model still struggles with:
+
+- thin flood boundaries
+- small flooded regions
+- fine segmentation details
+
+---
+
+# Vision Module V3 (Current)
+
+Version 3 is currently under development.
+
+## Planned Improvements
+
+- Batch Normalization
+- Early Stopping
+- Longer training with validation monitoring
+
+The goal is to improve segmentation quality while reducing overfitting.
+
 ---
 
 ## Dataset C
 
 Historical weather and rainfall datasets used to estimate weather-related flood risk.
+
+## Status
+
+Not started.
 
 ---
 
@@ -146,6 +256,26 @@ Historical weather and rainfall datasets used to estimate weather-related flood 
 - OpenCV
 - Matplotlib
 - Jupyter Notebook
+
+---
+
+# Planned Fusion Model
+
+The final FLOOD AI system will combine:
+
+Environmental Module
++
+Vision Module
++
+Weather Module
+
+↓
+
+Flood Intelligence Engine
+
+↓
+
+Flood Prediction & Analysis
 
 ---
 
@@ -193,17 +323,6 @@ FloodAI/
 
 ---
 
-# Future Work
-
-- Replace the synthetic environmental dataset with real-world observations.
-- Improve satellite flood segmentation accuracy.
-- Train weather prediction models.
-- Develop a fusion engine that combines outputs from multiple AI models.
-- Build a web application for interactive flood analysis.
-- Investigate edge AI deployment for satellite-based inference.
-
----
-
 # Disclaimer
 
 FloodAI is an educational and research-oriented project exploring multi-modal artificial intelligence for disaster management. It is not intended for operational flood forecasting or emergency response without further validation.
@@ -215,9 +334,3 @@ FloodAI is an educational and research-oriented project exploring multi-modal ar
 - 10-epoch training pipeline
 - Prediction pipeline
 - Evaluation metrics
-
-### Results
-
-- IoU: 0.5715
-- Dice Score: 0.7213
-- Pixel Accuracy: 0.8148
