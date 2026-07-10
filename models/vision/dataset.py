@@ -1,41 +1,67 @@
-from torch.utils.data import Dataset
+import os
+
 from PIL import Image
+
+from torch.utils.data import Dataset
+
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
-import os
 
 
 class FloodDataset(Dataset):
+    """
+    PyTorch Dataset for FloodAI satellite flood segmentation.
+
+    Returns:
+        image      : Tensor [3,256,256]
+        mask       : Tensor [1,256,256]
+        image_name : Original image filename
+    """
 
     def __init__(self, image_dir, mask_dir):
 
         self.image_dir = image_dir
         self.mask_dir = mask_dir
 
-        self.images = sorted(os.listdir(image_dir))
-        self.masks = sorted(os.listdir(mask_dir))
-        
+        self.images = sorted([
+            file
+            for file in os.listdir(image_dir)
+            if file.lower().endswith((".jpg", ".jpeg", ".png"))
+        ])
+
+        self.masks = sorted([
+            file
+            for file in os.listdir(mask_dir)
+            if file.lower().endswith((".jpg", ".jpeg", ".png"))
+        ])
+
+        if len(self.images) == 0:
+            raise ValueError("No images found.")
+
+        if len(self.masks) == 0:
+            raise ValueError("No masks found.")
+
+        if len(self.images) != len(self.masks):
+            raise ValueError(
+                "Number of images and masks do not match."
+            )
+
         self.image_transform = transforms.Compose([
-
-    transforms.Resize((256, 256)),
-
-    transforms.ToTensor()
-
-])
+            transforms.Resize((256, 256)),
+            transforms.ToTensor()
+        ])
 
         self.mask_transform = transforms.Compose([
-    transforms.Resize(
-        (256, 256),
-        interpolation=InterpolationMode.NEAREST
-    ),
-    transforms.ToTensor()
-])
-
+            transforms.Resize(
+                (256, 256),
+                interpolation=InterpolationMode.NEAREST
+            ),
+            transforms.ToTensor()
+        ])
 
     def __len__(self):
 
         return len(self.images)
-
 
     def __getitem__(self, index):
 

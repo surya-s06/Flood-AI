@@ -207,3 +207,17 @@ FloodAI/
 # Disclaimer
 
 FloodAI is an educational and research-oriented project exploring multi-modal artificial intelligence for disaster management. It is not intended for operational flood forecasting or emergency response without further validation.
+
+## Vision Module
+
+- Custom FloodDataset
+- U-Net segmentation model
+- 10-epoch training pipeline
+- Prediction pipeline
+- Evaluation metrics
+
+### Results
+
+- IoU: 0.5715
+- Dice Score: 0.7213
+- Pixel Accuracy: 0.8148
