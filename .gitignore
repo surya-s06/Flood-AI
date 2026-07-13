@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+
+# Trained Models
+*.pth
+
+# Ignore only saved model folders
+models/vision/saved_models/
+models/environmental/saved_models/
+
+# Dataset
+data/satellite/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Generated prediction images only
+outputs/predictions/
