@@ -147,7 +147,7 @@ Development will resume once a suitable dataset is available.
 
 ---
 
-## Dataset B
+## Dataset B Complete ✅
 
 Satellite imagery and segmentation masks used for flood detection and segmentation.
 
@@ -160,14 +160,10 @@ Satellite imagery and segmentation masks used for flood detection and segmentati
 
 The first version established the complete computer vision pipeline.
 
-### Completed
-
-- Custom PyTorch Dataset
-- DataLoader
-- U-Net implementation
-- Training pipeline
-- Prediction pipeline
-- Evaluation pipeline
+## Improvements
+- Baseline U-Net implementation
+- Basic training pipeline
+- Initial evaluation and prediction pipeline
 
 ### Results
 
@@ -222,17 +218,39 @@ Despite the improvement, the model still struggles with:
 
 ---
 
-# Vision Module V3 (Current)
+### Vision V3 (Final)
 
-Version 3 is currently under development.
-
-## Planned Improvements
-
+## Improvements
 - Batch Normalization
 - Early Stopping
-- Longer training with validation monitoring
+- Gradient Clipping
+- Validation IoU tracking
+- Automatic model versioning
+- Improved experiment tracking
 
-The goal is to improve segmentation quality while reducing overfitting.
+Training was monitored using:
+- Training Loss
+- Validation Loss
+- Validation IoU
+- Learning Rate Scheduler
+- Early Stopping
+
+The final model converged successfully and stopped automatically at **Epoch 16**, indicating that further training was not providing meaningful improvements.
+
+## Final Results
+
+| Metric | Score |
+|--------|------:|
+| IoU | **0.6887** |
+| Dice Score | **0.8132** |
+| Pixel Accuracy | **0.8646** |
+
+Compared to the initial baseline (Vision V1), the final model achieved:
+
+- **+20.5% relative improvement in IoU**
+- **+12.7% relative improvement in Dice Score**
+- **Higher overall pixel accuracy**
+- **Cleaner and more accurate flood segmentation masks**
 
 ---
 
@@ -334,3 +352,11 @@ FloodAI is an educational and research-oriented project exploring multi-modal ar
 - 10-epoch training pipeline
 - Prediction pipeline
 - Evaluation metrics
+
+# Experiments
+
+| Version | Changes | IoU | Dice Score | Pixel Accuracy | Status |
+|---------|---------|------:|------:|------:|---------|
+| **V1** | Baseline U-Net + BCE Loss | **0.5715** | **0.7213** | **0.8148** | Archived |
+| **V2** | BCE + Dice Loss + Paired Data Augmentation + Learning Rate Scheduler + Gradient Clipping | **0.6227** | **0.7629** | **0.8280** |  Current Best |
+| **V3** | Batch Normalization + Early Stopping *(planned)* | — | — | — | 🚧 In Progress |
