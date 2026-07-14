@@ -13,7 +13,8 @@ models/vision/saved_models/
 models/environmental/saved_models/
 
 # Dataset
-data/satellite/
+data/satellite/images/
+data/satellite/masks/
 
 # Jupyter
 .ipynb_checkpoints/
