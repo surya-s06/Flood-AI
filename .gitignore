@@ -9,8 +9,13 @@ __pycache__/
 *.pth
 
 # Ignore only saved model folders
-models/vision/saved_models/
+models/vision/saved_models/V1
+models/vision/saved_models/V2
+models/vision/saved_models/V3
 models/environmental/saved_models/
+
+models/__pycache__
+models/environmental/__pycache__
 
 # Dataset
 data/satellite/images/

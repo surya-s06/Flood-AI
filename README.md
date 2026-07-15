@@ -218,7 +218,7 @@ Despite the improvement, the model still struggles with:
 
 ---
 
-### Vision V3 (Final)
+# Vision V3 (Final)
 
 ## Improvements
 - Batch Normalization
